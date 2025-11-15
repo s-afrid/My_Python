@@ -11,3 +11,8 @@ note = APIRouter()
 async def read_note():
     return {"message": "Root of route note"}
 
+@note.post('/')
+async def read_data(note_data: Note):
+    data = dict(note_data)
+    result = conn.Note.notes.insert_one(data)
+    return {"received": {"message":"Save to DB","id": str(result.inserted_id)}}

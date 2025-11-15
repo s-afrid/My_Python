@@ -33,7 +33,8 @@ async def read_home(request: Request):
         newDocs.append(
             {
                 "id": d["_id"],
-                "note": d["note"]
+                "title": d["title"],
+                "desc": d["desc"]
             }
         )
     print(newDocs)
