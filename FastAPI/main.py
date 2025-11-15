@@ -4,13 +4,28 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from typing import Union
 
+# import mongoclient
+from pymongo import MongoClient
+
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+# Establish connection to mongoDB
+conn = MongoClient('mongodb+srv://s-afrid:Af02052002@cluster0.ht9jcbk.mongodb.net/?appName=Cluster0')
+
+try:
+    conn.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(e)
+
 @app.get('/',response_class=HTMLResponse)
 async def read_home(request: Request):
+    docs = conn.Note.notes.find({})
+    for d in docs:
+        print(d["_id"])
     return templates.TemplateResponse('index.html',{'request': request})
 
 @app.get("/page/{id}", response_class=HTMLResponse)
