@@ -4,6 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from typing import Union
 
+from routes.note import note
+
 # import mongoclient
 from pymongo import MongoClient
 
@@ -20,6 +22,8 @@ try:
     print("Pinged your deployment. You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
+
+app.include_router(note,prefix="/note")
 
 @app.get('/',response_class=HTMLResponse)
 async def read_home(request: Request):
