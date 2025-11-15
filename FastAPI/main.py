@@ -24,9 +24,16 @@ except Exception as e:
 @app.get('/',response_class=HTMLResponse)
 async def read_home(request: Request):
     docs = conn.Note.notes.find({})
+    newDocs = []
     for d in docs:
-        print(d["_id"])
-    return templates.TemplateResponse('index.html',{'request': request})
+        newDocs.append(
+            {
+                "id": d["_id"],
+                "note": d["note"]
+            }
+        )
+    print(newDocs)
+    return templates.TemplateResponse('index.html',{'request': request, "newDocs" : newDocs})
 
 @app.get("/page/{id}", response_class=HTMLResponse)
 async def read_page(request: Request, id: str):
